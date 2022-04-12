@@ -7,8 +7,10 @@ services:
     restart: unless-stopped
     volumes:
       - ./.env:/var/www/html/.env
+      - ./app/logs:/var/www/html/storage/logs
+      - ./app/configs:/etc/wireguard
     ports:
-      - "51820:51820"
+      - "51820:51820/udp"
     networks:
       - wg-admin
     cap_add:
@@ -20,7 +22,7 @@ services:
 
 
   webserver:
-    image: medic84/wg-admin-app:latest
+    image: medic84/wg-admin-nginx:latest
     container_name: webserver
     restart: unless-stopped
     ports:
