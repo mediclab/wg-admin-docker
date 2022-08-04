@@ -3,14 +3,14 @@ version: '3'
 services:
   app:
     image: medic84/wg-admin:latest
-    env_file:
-      - .env
     container_name: app
     restart: unless-stopped
     volumes:
+      - ./.env:/var/www/html/.env
       - ./app/logs:/var/www/html/storage/logs
       - ./app/configs:/etc/wireguard
-    network_mode: "host"
+    ports:
+      - "${WG_ALLOWED_PORTS:-51800-51850}:${WG_ALLOWED_PORTS:-51800-51850}/udp"
     networks:
       - wg-admin
     cap_add:
@@ -26,8 +26,8 @@ services:
     container_name: webserver
     restart: unless-stopped
     ports:
-      - "8080:80"
-      - "8443:443"
+      - "${PANEL_HTTP_PORT:-8080}:80"
+      - "${PANEL_HTTPS_PORT:-8443}:443"
     networks:
       - wg-admin
 
