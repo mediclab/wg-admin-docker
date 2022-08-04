@@ -2,15 +2,15 @@ version: '3'
 
 services:
   app:
-    image: medic84/wg-admin-app:latest
+    image: medic84/wg-admin:latest
+    env_file:
+      - .env
     container_name: app
     restart: unless-stopped
     volumes:
-      - ./.env:/var/www/html/.env
       - ./app/logs:/var/www/html/storage/logs
       - ./app/configs:/etc/wireguard
-    ports:
-      - "51820:51820/udp"
+    network_mode: "host"
     networks:
       - wg-admin
     cap_add:
@@ -36,9 +36,9 @@ services:
     container_name: db
     restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: wgadmin
-      POSTGRES_USER: wgadmin
-      POSTGRES_DB: wgadmin
+      POSTGRES_PASSWORD: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_PASSWORD}
     volumes:
       - dbdata:/var/lib/postgresql/data
     networks:
