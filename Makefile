@@ -8,5 +8,10 @@ up:
 	@docker-compose up -d;
 down:
 	@docker-compose down;
+upgrade:
+	@docker-compose down;
+	@docker-compose pull;
+	@docker-compose up -d;
+	@docker-compose exec app php artisan migrate --force;
 create-admin:
 	@docker-compose exec app php artisan admin:create;

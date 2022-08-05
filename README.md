@@ -21,3 +21,9 @@ make create-admin
 Congratulations! Your Wireguard VPN is working!
 
 <p align="center"><img src="https://raw.githubusercontent.com/mediclab/wg-admin-docker/master/img/wg-admin.png" height="472" width="822"></p>
+
+## Upgrading
+* Exec command
+ ```
+make upgrade
+```
