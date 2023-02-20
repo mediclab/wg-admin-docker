@@ -6,6 +6,7 @@ services:
     env_file:
       - .env
     container_name: app
+    command: "--host=0.0.0.0 --rpc-port=6001 --port=80"
     restart: unless-stopped
     volumes:
       - ./app/logs:/var/www/html/storage/logs
