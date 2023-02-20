@@ -1,7 +1,7 @@
 init:
 	@mkdir -p ./app/configs && mkdir -p ./app/logs;
 	@chown 82:82 ./app/logs;
-	@openssl rand -hex 16 | sed -i "s/APP_KEY=.*/APP_KEY=$(cat)/g" .env
+	@docker-compose run --rm app php artisan key:generate --show | sed -e 's/[\/&]/\\&/g' | sed -i 's/APP_KEY=.*/APP_KEY=$(cat)/g' .env
 	@docker-compose up -d;
 	@docker-compose exec app php artisan migrate --force;
 up:
