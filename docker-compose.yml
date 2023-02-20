@@ -3,14 +3,17 @@ version: '3'
 services:
   app:
     image: medic84/wg-admin:latest
+    env_file:
+      - .env
     container_name: app
     restart: unless-stopped
     volumes:
-      - ./.env:/var/www/html/.env
       - ./app/logs:/var/www/html/storage/logs
       - ./app/configs:/etc/wireguard
     ports:
       - "${WG_ALLOWED_PORTS:-51800-51850}:${WG_ALLOWED_PORTS:-51800-51850}/udp"
+      - "${PANEL_HTTP_PORT:-8080}:80"
+      - "${PANEL_HTTPS_PORT:-8443}:443"
     networks:
       - wg-admin
     cap_add:
@@ -19,17 +22,6 @@ services:
     sysctls:
         - net.ipv4.ip_forward=1
         - net.ipv4.conf.all.src_valid_mark=1
-
-
-  webserver:
-    image: medic84/wg-admin-nginx:latest
-    container_name: webserver
-    restart: unless-stopped
-    ports:
-      - "${PANEL_HTTP_PORT:-8080}:80"
-      - "${PANEL_HTTPS_PORT:-8443}:443"
-    networks:
-      - wg-admin
 
   db:
     image: postgres:14-alpine
@@ -44,10 +36,20 @@ services:
     networks:
       - wg-admin
 
+  redis:
+    image: redis:7.0-alpine3.17
+    container_name: redis
+    volumes:
+      - rddata:/data
+    networks:
+      - wg-admin
+
 networks:
   wg-admin:
     driver: bridge
 
 volumes:
   dbdata:
+    driver: local
+  rddata:
     driver: local
