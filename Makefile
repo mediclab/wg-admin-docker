@@ -15,3 +15,6 @@ upgrade:
 	@docker-compose exec app php artisan migrate --force;
 create-admin:
 	@docker-compose exec app php artisan admin:create;
+add_cron_job:
+	@echo "Adding cron job..."
+	(crontab -l ; echo '* * * * * cd $(pwd) &&  docker-compose exec app php artisan device:traffic:update >> /dev/null 2>&1') | crontab -

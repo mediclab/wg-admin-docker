@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 
 services:
   app:
@@ -23,6 +23,11 @@ services:
     sysctls:
         - net.ipv4.ip_forward=1
         - net.ipv4.conf.all.src_valid_mark=1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   db:
     image: postgres:14-alpine
@@ -34,6 +39,11 @@ services:
       POSTGRES_DB: ${DB_PASSWORD}
     volumes:
       - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_DATABASE}" ]
+      interval: 2s
+      timeout: 2s
+      retries: 5
     networks:
       - wg-admin
 
@@ -42,6 +52,11 @@ services:
     container_name: redis
     volumes:
       - rddata:/data
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 1s
+      timeout: 2s
+      retries: 5
     networks:
       - wg-admin
 
