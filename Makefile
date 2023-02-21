@@ -17,4 +17,4 @@ create-admin:
 	@docker compose exec app php artisan admin:create;
 add-cron:
 	@echo "Adding cron job..."
-	(crontab -l ; echo "* * * * * cd $$(pwd) && docker compose exec app php artisan device:traffic:update >> /dev/null 2>&1") | crontab - ;
+	@(crontab -l ; echo "* * * * * cd $$(pwd) && docker compose exec app php artisan device:traffic:update >> /dev/null 2>&1") | crontab - ;
