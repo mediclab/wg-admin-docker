@@ -3,12 +3,11 @@ version: '3.9'
 services:
   app:
     image: medic84/wg-admin:latest
-    env_file:
-      - .env
     container_name: app
     command: "--host=0.0.0.0 --rpc-port=6001 --port=80"
     restart: unless-stopped
     volumes:
+      - ./.env:/var/www/html/.env
       - ./app/logs:/var/www/html/storage/logs
       - ./app/configs:/etc/wireguard
     ports:

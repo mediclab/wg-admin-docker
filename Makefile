@@ -1,8 +1,8 @@
 init:
 	@mkdir -p ./app/configs && mkdir -p ./app/logs;
 	@chown 82:82 ./app/logs;
-	@docker compose run --rm app php artisan key:generate --show | sed -e 's/[\/&]/\\&/g' | sed -i "s/APP_KEY=.*/APP_KEY=$$(cat)/g" .env;
 	@docker compose up -d;
+	@docker compose exec app php artisan key:generate;
 	@docker compose exec app php artisan migrate --force;
 up:
 	@docker compose up -d;
