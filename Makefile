@@ -9,8 +9,8 @@ up:
 down:
 	@docker compose down;
 upgrade:
-	@docker compose down;
 	@docker compose pull;
+	@docker compose down;
 	@docker compose up -d;
 	@docker compose exec app php artisan migrate --force;
 create-admin:
