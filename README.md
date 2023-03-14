@@ -20,6 +20,11 @@ make create-admin
 
 Congratulations! Your Wireguard VPN is working!
 
+If you want to save statistics between restarts, you need to add a crontab
+```
+make add-cron
+```
+
 <p align="center"><img src="https://i.ibb.co/n7vcnPt/wg-admin.png" alt="wg-admin" border="0" height="472" width="822"></p>
 
 
